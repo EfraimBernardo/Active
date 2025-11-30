@@ -1,0 +1,26 @@
+{
+  "name": "active",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/EfraimBernardo/Active#readme",
+  "bugs": {
+    "url": "https://github.com/EfraimBernardo/Active/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EfraimBernardo/Active.git"
+  },
+  "license": "ISC",
+  "author": "Efraim Bernardo",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "nodemailer": "^7.0.11"
+  }
+}
