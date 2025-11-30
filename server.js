@@ -44,8 +44,8 @@ app.post("/enviar", async (req, res) => {
   });
 
   let mailOptions = {
-    from: `"Formulário" <domingossapanda@gmail.com>`,
-    to: "domingossapanda@gmail.com",
+    from: `"Formulário" <efraimjoaomanuelbernardo@gmail.com>`,
+    to: "efraimjoaomanuelbernardo@gmail.com",
     replyTo: Email,
     subject: "Nova mensagem do formulário",
     text: `
