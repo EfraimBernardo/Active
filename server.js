@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
@@ -18,7 +17,30 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ✅ ROTA POST CORRETA
+// ✅ CONFIGURA NODMAILER
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
+});
+
+// ✅ TESTE AUTOMÁTICO AO INICIAR
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("❌ ERRO NO SMTP:", error);
+  } else {
+    console.log("✅ SMTP CONECTADO COM SUCESSO");
+  }
+});
+
+// ✅ ROTA POST DO FORMULÁRIO
 app.post("/enviar", async (req, res) => {
   const {
     Nome,
@@ -35,18 +57,9 @@ app.post("/enviar", async (req, res) => {
     return res.status(400).send("❌ Preencha todos os campos obrigatórios.");
   }
 
-  const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-
-  let mailOptions = {
-    from: `"Formulário" <efraimjoaomanuelbernardo@gmail.com>`,
-    to: "efraimjoaomanuelbernardo@gmail.com",
+  const mailOptions = {
+    from: `"Formulário" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
     replyTo: Email,
     subject: "Nova mensagem do formulário",
     text: `
@@ -71,7 +84,23 @@ Comentário: ${Comentarios}
   }
 });
 
+// ✅ ROTA DE TESTE (opcional)
+app.get("/test-email", async (req, res) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: "Teste Render",
+      text: "Se este email chegou, então o Render está OK!"
+    });
+    res.send("✅ Email enviado com sucesso!");
+  } catch (err) {
+    console.log("❌ ERRO AO ENVIAR:", err);
+    res.send("❌ Falha ao enviar email");
+  }
+});
+
 // ✅ SERVIDOR PRONTO PARA O RENDER
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
-})
+});
