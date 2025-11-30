@@ -58,20 +58,18 @@ app.post("/enviar", async (req, res) => {
   }
 
   const mailOptions = {
-    from: `"Formulário" <${process.env.EMAIL_USER}>`,
+    from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     replyTo: Email,
     subject: "Nova mensagem do formulário",
-    text: `
-Nome: ${Nome}
+    text: `Nome: ${Nome}
 Idade: ${Idade}
 Email: ${Email}
 Telefone: ${Telefone}
 Visão: ${Pretende}
 Resultados: ${Instituicao}
 Como soube: ${Saber}
-Comentário: ${Comentarios}
-    `
+Comentário: ${Comentarios}`
   };
 
   try {
@@ -84,14 +82,14 @@ Comentário: ${Comentarios}
   }
 });
 
-// ✅ ROTA DE TESTE (opcional)
+// ✅ ROTA DE TESTE DO EMAIL
 app.get("/test-email", async (req, res) => {
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: "Teste Render",
-      text: "Se este email chegou, então o Render está OK!"
+      text: "Se esse email chegou, então o Render está OK!"
     });
     res.send("✅ Email enviado com sucesso!");
   } catch (err) {
